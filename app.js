@@ -265,7 +265,7 @@ function renderNews() {
 
 const NAV = ["Under way", "At anchor", "Not under command", "Restricted", "Constrained", "Moored", "Aground", "Fishing", "Sailing"];
 const SITE_NAMES = { gta: "GTA", kribi: "Kribi", sanmatias: "San Matías", singapore: "Singapore", yantai: "Yantai" };
-const shipHtml = s => `<b>${esc(s.name || "Unknown")}</b>${s.golar ? ' <span class="g">Golar</span>' : ""}<br>
+const shipHtml = s => `<b>${esc(s.name || "Unknown")}</b>${s.golar ? ' <span class="g">Golar</span>' : s.tanker ? ' <span class="g">Tanker</span>' : ""}<br>
   <span class="muted">${SITE_NAMES[s.site] || ""} · ${s.sog != null ? `${s.sog.toFixed(1)} kn` : ""} ${NAV[s.status] ? "· " + NAV[s.status] : ""}${s.dest ? ` · to ${esc(s.dest)}` : ""}</span>`;
 
 async function loadShips() {
@@ -275,11 +275,11 @@ async function loadShips() {
     const j = await r.json();
     if (j.error) throw new Error(j.error);
     state.ships = j.ships.filter(s => s.lat != null);
-    $("shipsStatus").textContent = `${state.ships.length} large vessels heard out of ${j.heard} in ${j.listenedMs / 1000}s · ${new Date(j.updated).toLocaleTimeString()}`;
+    $("shipsStatus").textContent = `${state.ships.length} vessels heard in ${j.listenedMs / 1000}s, ${state.ships.filter(s => s.tanker).length} of them tankers or gas carriers · ${new Date(j.updated).toLocaleTimeString()}`;
     const order = Object.keys(SITE_NAMES);
     $("ships").innerHTML = state.ships
-      .sort((a, b) => (b.golar ? 1 : 0) - (a.golar ? 1 : 0) || order.indexOf(a.site) - order.indexOf(b.site))
-      .map(s => `<li data-m="${s.mmsi}">${shipHtml(s)}</li>`).join("") || `<li class="muted">No large vessels reported in this window. Moored units only report every few minutes, so try again shortly.</li>`;
+      .sort((a, b) => (b.golar ? 2 : b.tanker ? 1 : 0) - (a.golar ? 2 : a.tanker ? 1 : 0) || order.indexOf(a.site) - order.indexOf(b.site))
+      .map(s => `<li data-m="${s.mmsi}">${shipHtml(s)}</li>`).join("") || `<li class="muted">No vessels reported in this window. Moored units only report every few minutes, so try again shortly.</li>`;
     $("ships").querySelectorAll("li[data-m]").forEach(li => li.addEventListener("click", () => {
       const s = state.ships.find(x => String(x.mmsi) === li.dataset.m);
       map.flyTo({ center: [s.lon, s.lat], zoom: 9 });

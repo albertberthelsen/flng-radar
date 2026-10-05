@@ -5,14 +5,14 @@
 // to its known mooring on the page.
 
 const SITES = {
-  gta:       [[15.6, -17.4], [16.6, -16.4]],   // Greater Tortue Ahmeyim, Mauritania/Senegal
-  kribi:     [[2.3, 9.2], [3.3, 10.0]],        // Hilli's old site, Cameroon
-  sanmatias: [[-41.6, -65.3], [-40.4, -63.8]], // Gulf of San Matías, Argentina
-  singapore: [[1.2, 103.55], [1.36, 103.75]],  // Seatrium yards, Tuas
-  yantai:    [[37.4, 121.2], [37.65, 121.55]], // CIMC Raffles, Yantai
+  gta:       [[14.5, -18.5], [17.5, -16.2]],    // Greater Tortue Ahmeyim and Dakar approaches
+  kribi:     [[1.8, 8.8], [3.6, 10.2]],         // Hilli's old site, Cameroon
+  sanmatias: [[-42.5, -65.5], [-40.0, -62.5]],  // Gulf of San Matías, Argentina
+  singapore: [[1.0, 103.4], [1.5, 104.2]],      // Singapore Strait incl. Seatrium yards
+  yantai:    [[37.2, 120.8], [38.0, 122.0]],    // CIMC Raffles, Yantai
 };
 const GOLAR_MMSI = { 538004196: "Gimi" };
-const LISTEN_MS = 20000;
+const LISTEN_MS = 45000;
 
 export async function GET() {
   const key = process.env.AISSTREAM_API_KEY;
@@ -50,8 +50,11 @@ export async function GET() {
   });
 
   if (ships.has("error")) return Response.json({ error: ships.get("error"), ships: [] }, { status: 502 });
-  // LNG carriers are AIS type 80 to 89 (tankers) and usually over 250 m; keep tankers, Golar units and unknowns that are large.
-  const list = [...ships.values()].filter(s => s.golar || (s.type >= 80 && s.type <= 89) || s.length >= 250 || /LNG/i.test(s.name));
+  // Static data (type, length) only arrives every few minutes, so most ships come without it.
+  // Keep everything we can place, and flag tankers (AIS type 80 to 89) and LNG names for the page.
+  const list = [...ships.values()]
+    .filter(s => s.lat != null && s.site)
+    .map(s => ({ ...s, tanker: (s.type >= 80 && s.type <= 89) || /LNG|GAS/i.test(s.name) }));
   return Response.json({ updated: Date.now(), listenedMs: LISTEN_MS, heard: ships.size, ships: list }, {
     headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=900" },
   });

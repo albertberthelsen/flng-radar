@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golar FLNG #4</title>
+<meta name="description" content="A business development case on where Golar LNG should deploy its fourth FLNG unit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0e12;
+  --panel: #12151b;
+  --text: #ece7dc;
+  --muted: #8b8f97;
+  --rule: rgba(236, 231, 220, 0.14);
+  --rule-strong: rgba(236, 231, 220, 0.28);
+  --accent: #8fb0d4;
+  --serif: "Fraunces", Georgia, serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f6f3ec; --panel: #ece8de; --text: #1a1c20; --muted: #5d6169;
+    --rule: rgba(26, 28, 32, 0.14); --rule-strong: rgba(26, 28, 32, 0.3); --accent: #3d6a99;
+    color-scheme: light;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--sans); font-size: 1.0625rem; line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+main { max-width: 46rem; margin: 0 auto; padding: 4rem 16px 6rem; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); letter-spacing: -0.01em; }
+h2 { font-size: 1.75rem; margin-bottom: 1rem; }
+h3 { font-size: 1.2rem; margin: 1.5rem 0 0.4rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--accent); }
+.label { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 1.2rem; color: var(--text); margin-top: 1.5rem; }
+section { border-top: 1px solid var(--rule); padding-top: 2.5rem; margin-top: 3.5rem; }
+section > .label { display: block; margin-bottom: 0.6rem; }
+.num { color: var(--accent); font-family: var(--mono); }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 1.5rem 0; }
+.stat { background: var(--bg); padding: 1rem; }
+.stat b { display: block; font-family: var(--serif); font-weight: 400; font-size: 1.7rem; line-height: 1.1; }
+.stat span { font-size: 0.85rem; color: var(--muted); }
+
+.table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+th { text-align: left; font-family: var(--mono); font-weight: 400; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 0.5rem 0.6rem 0.5rem 0; border-bottom: 1px solid var(--rule-strong); }
+td { padding: 0.65rem 0.6rem 0.65rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+td.r, th.r { text-align: right; }
+
+.calc { background: var(--panel); border: 1px solid var(--rule); padding: 1.25rem; margin: 1.5rem 0; }
+.calc .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-bottom: 1rem; }
+.calc label { font-size: 0.95rem; min-width: 11rem; }
+.calc output { font-family: var(--mono); color: var(--accent); min-width: 5rem; }
+input[type=range] { flex: 1; min-width: 10rem; accent-color: var(--accent); }
+.calc .stats { margin: 0.5rem 0 0; }
+.calc .stat { background: var(--panel); }
+
+.bar { height: 6px; background: var(--rule); margin-top: 0.35rem; }
+.bar i { display: block; height: 100%; background: var(--accent); transition: width 0.25s ease; }
+.cand-name { font-family: var(--serif); font-size: 1.05rem; }
+.cand-where { color: var(--muted); font-size: 0.85rem; }
+details { margin-top: 0.4rem; }
+summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
+details p { font-size: 0.92rem; margin: 0.4rem 0 0; }
+.weights .row label { min-width: 15rem; }
+
+ol.steps { padding-left: 1.2rem; }
+ol.steps li { margin-bottom: 0.6rem; }
+.sources { font-size: 0.85rem; color: var(--muted); }
+.sources li { margin-bottom: 0.3rem; }
+footer { margin-top: 4rem; font-size: 0.85rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <span class="label">Business development case · October 2026</span>
+  <h1>Where should Golar's fourth FLNG go?</h1>
+  <p class="lede">In August 2026 Golar LNG ordered a fourth floating liquefaction unit without a charter in place. It will be the earliest FLNG capacity available anywhere when it leaves the yard at the end of 2029. This case looks at what the unit can earn and screens six places it could work.</p>
+  <p class="label">Albert Berthelsen · Built on Golar's Q2 2026 report and public sources</p>
+
+  <section id="golar">
+    <span class="label">01 · The company</span>
+    <h2>Golar in one page</h2>
+    <p>Golar sold its shipping and FSRU businesses and is now a pure FLNG company. It converts LNG carriers into floating liquefaction plants, moors them next to offshore gas fields, and charters them out on 20 year contracts. The customer brings the gas. Golar turns it into LNG for a fixed fee, and on its Argentine contracts also takes 25% of the LNG price above $8/MMBtu.</p>
+    <div class="stats" id="stats"></div>
+    <div class="table-wrap"><table id="fleet">
+      <thead><tr><th>Unit</th><th>Design</th><th class="r">MTPA</th><th>Status and contract</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <p>Hilli finished eight years in Cameroon in July 2026 with 156 cargoes and full economic uptime. That record matters more than any brochure: Golar is the only company that has run FLNG as a leased service for years, and buyers who need gas exported fast pay for that.</p>
+  </section>
+
+  <section id="economics">
+    <span class="label">02 · Unit economics</span>
+    <h2>What one MKII unit earns</h2>
+    <p>FLNG #4 costs about $2.45 billion fully delivered. If it is chartered on the same terms as its sister vessel Esperanza, Golar gets $400 million of EBITDA a year for 20 years, plus 25% of the FOB price above $8/MMBtu, which management puts at $40 million a year for every dollar above the threshold. Management targets a capex to EBITDA multiple of 5 to 6 times.</p>
+    <p>The fixed fee is a floor. When LNG prices fall below $8, Golar still gets its $400 million and the gas owner carries the loss. When prices rise, Golar shares the gain.</p>
+    <div class="calc">
+      <div class="row"><label for="fob">FOB LNG price</label><input type="range" id="fob" min="4" max="16" step="0.5" value="10"><output id="fobOut"></output></div>
+      <div class="row"><label for="fee">Base charter EBITDA</label><input type="range" id="fee" min="250" max="500" step="10" value="400"><output id="feeOut"></output></div>
+      <div class="row"><label for="capex">Delivered cost</label><input type="range" id="capex" min="1800" max="3200" step="50" value="2450"><output id="capexOut"></output></div>
+      <div class="stats" id="calcOut"></div>
+    </div>
+    <p class="label">Assumes capex spread 15/30/30/25% over 2026 to 2029, first EBITDA in 2030, 30% of 2.5% US CPI from year six, no tax, no residual value, unlevered.</p>
+    <p>One more conversion worth knowing: a 3.5 MTPA unit needs roughly <span class="num" id="feedgas"></span> MMscf/d of feed gas. That is the first filter for any field. Anything much smaller cannot fill a MKII, which is exactly why Golar left Cameroon.</p>
+  </section>
+
+  <section id="market">
+    <span class="label">03 · The market</span>
+    <h2>Why there is a window</h2>
+    <p>Buyers want new LNG quickly and from more places, after supply shocks hit several large exporters. Floating units are faster to build than onshore plants and can be moved if a field disappoints. The bottleneck is yards. Samsung Heavy builds most newbuild FLNGs and has orders queuing from Eni, Delfin and Western LNG. Its only serious rival, Wison in China, was put under US sanctions in January 2026.</p>
+    <p>Most of the other projects are owned by the gas producer: Eni owns Coral North in Mozambique and the Congo units, and Delfin took FID in June 2026 on its own unit for 2030. Golar's model is different. It owns the unit and leases it, so a producer can export without putting $2 to 3 billion of its own capital into a plant. With delivery at the end of 2029, Golar estimates FLNG #4 is one to two years ahead of anything else that could be ordered today.</p>
+  </section>
+
+  <section id="screen">
+    <span class="label">04 · Screen</span>
+    <h2>Six possible homes</h2>
+    <p>Each candidate gets a score from 1 to 5 on five criteria. The scores are my own judgement from public information, and the reasoning is under each name. Move the weights to see how the ranking changes.</p>
+    <div class="calc weights" id="weights"></div>
+    <div class="table-wrap"><table id="rank">
+      <thead><tr><th>#</th><th>Candidate</th><th class="r">Score</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <section id="recommendation">
+    <span class="label">05 · Recommendation</span>
+    <h2>Lead with GTA Phase 2, keep Argentina as the fallback</h2>
+    <h3>1. GTA Phase 2, Mauritania and Senegal</h3>
+    <p>bp and its partners are studying a gravity based structure for 2.5 to 3 MTPA. A GBS is a concrete platform built for one site, which takes years and puts the capital on the partners' balance sheets. Golar can offer something they have already watched work: Gimi sits on the same field and produced 15% above its contracted volume in Q2 2026. Same operator, same gas, same crew model, one more unit, and no upstream capex for the plant.</p>
+    <p>The pitch would rest on three points: earlier first gas than a GBS, no capital tied up in liquefaction, and an operator with a track record on that exact field. The main risk is timing, since the two host governments are still negotiating Phase 2 terms with bp and Kosmos.</p>
+    <h3>2. SESA expansion, Argentina</h3>
+    <p>The surest volume. Vaca Muerta has the gas, Golar already owns 10% of SESA, and the offtake tender showed demand well beyond the 2 MTPA sold to SEFE. The downside is concentration. Three of Golar's four units in Argentina would tie most of the company's value to one country's currency and politics, and a third unit needs more pipeline capacity on the San Matías route.</p>
+    <h3>3. Keep warm</h3>
+    <p>Leviathan is the largest prize but Chevron is running its own FEED and leans towards owning the unit. Nigeria has a signed development agreement but has missed its own FID date by almost two years. Both are worth tracking, neither should hold up a charter for #4.</p>
+    <h3>What I would do in the first weeks</h3>
+    <ol class="steps">
+      <li>Map the GTA Phase 2 decision process: who in bp, Kosmos, Petrosen and SMH decides, and what the GBS concept is estimated to cost and when it could start.</li>
+      <li>Build a side by side of GBS versus a second FLNG on first gas date, partner capex and cost per tonne.</li>
+      <li>Work out how much extra pipeline capacity a third Argentine unit needs, so the fallback has a real price on it.</li>
+    </ol>
+  </section>
+
+  <section id="sources">
+    <span class="label">Sources</span>
+    <ul class="sources">
+      <li><a href="https://www.globenewswire.com/news-release/2026/08/13/3344321/0/en/golar-lng-limited-interim-results-for-the-period-ended-june-30-2026.html">Golar LNG, interim results for the period ended 30 June 2026</a></li>
+      <li><a href="https://www.fool.com/earnings/call-transcripts/2026/08/20/golar-glng-q2-2026-earnings-call-transcript/">Golar Q2 2026 earnings call transcript</a></li>
+      <li><a href="https://www.lngindustry.com/floating-lng/13082026/golar-lng-orders-fourth-flng-unit-for-2029-delivery/">LNG Industry: Golar orders fourth FLNG unit</a></li>
+      <li><a href="https://www.worldoil.com/news/2025/8/7/golar-lng-secures-20-year-flng-charter-with-argentina-s-southern-energy/">World Oil: 20 year charter with Southern Energy</a></li>
+      <li><a href="https://msgbcoilgasandpower.com/news/kosmos-energy-targets-36-lng-cargoes-senegal-mauritania-gta-project-2026">Kosmos targets 36 GTA cargoes in 2026</a></li>
+      <li><a href="https://www.energyintel.com/00000196-d382-defc-ad9e-d79296b80000">Energy Intelligence: Mauritania and GTA Phase 2</a></li>
+      <li><a href="https://www.tradewindsnews.com/gas/chevron-and-newmed-select-yards-for-leviathan-flng-dual-feed-contracts/2-1-1430070">TradeWinds: Leviathan FLNG dual FEED</a></li>
+      <li><a href="https://www.lngindustry.com/floating-lng/12062024/nnpc-signs-project-development-agreement-with-golar-lng/">LNG Industry: NNPC and Golar project development agreement</a></li>
+      <li><a href="https://www.capmad.com/post/golar-lng-ends-hilli-episeyo-contract-cameroon-to-lose-its-only-floating-lng-unit">Capmad: Hilli leaves Cameroon</a></li>
+      <li><a href="https://pgjonline.com/news/2026/june/delfin-reaches-5-billion-fid-for-first-us-flng-project">PGJ: Delfin FID</a></li>
+      <li><a href="https://www.hellenicshippingnews.com/samsung-heavy-eyes-5-5-bn-flng-ship-deals-as-trump-sanctions-china/">Samsung Heavy FLNG orders and Wison sanctions</a></li>
+    </ul>
+  </section>
+
+  <footer>Model and data: <span class="num">model/flng_model.py</span>. Not investment advice, and not affiliated with Golar LNG.</footer>
+</main>
+
+<script src="data.js"></script>
+<script>
+const D = window.DATA;
+const fmt = (n, d = 0) => n.toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: d });
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// 01 key numbers and fleet
+const k = D.key;
+const stats = [
+  [`$${fmt(k.ebitda_backlog_busd)}bn`, "EBITDA backlog, before upside"],
+  [`$${fmt(k.q2_adj_ebitda_musd)}M`, "Adj. EBITDA, Q2 2026"],
+  [`$${fmt(k.net_debt_musd / 1000, 1)}bn`, "Net debt"],
+  [`$${fmt(k.upside_per_usd_mmbtu_musd)}M`, "Extra EBITDA per $1 above $8"],
+  [`${D.fleet.reduce((s, f) => s + f.mtpa, 0).toFixed(1)}`, "MTPA controlled incl. #4"],
+];
+document.getElementById("stats").innerHTML = stats.map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
+document.querySelector("#fleet tbody").innerHTML = D.fleet.map(f =>
+  `<tr><td class="cand-name">${esc(f.name)}</td><td>${f.design}</td><td class="r">${f.mtpa}</td><td>${esc(f.status)}<br><span class="cand-where">${esc(f.contract)}</span></td></tr>`).join("");
+document.getElementById("feedgas").textContent = fmt(3.5 * D.mmscfd_per_mtpa);
+
+// 02 calculator, same logic as flng_model.py
+function irr(cfs) {
+  let lo = -0.5, hi = 1;
+  for (let i = 0; i < 200; i++) {
+    const mid = (lo + hi) / 2;
+    const npv = cfs.reduce((s, c, t) => s + c / Math.pow(1 + mid, t), 0);
+    npv > 0 ? lo = mid : hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+function run(fob, fee, capex) {
+  const u = D.unit, start = Math.min(...Object.keys(u.capex_by_year).map(Number));
+  const upside = Math.max(0, fob - u.threshold_usd_mmbtu) * u.upside_per_usd_musd;
+  const cfs = []; let cum = 0, payback = null;
+  for (let y = start; y < u.first_ebitda_year + u.contract_years; y++) {
+    let cf = -capex * (u.capex_by_year[y] || 0);
+    const t = y - u.first_ebitda_year;
+    if (t >= 0) cf += fee * Math.pow(1 + u.cpi * u.cpi_share, Math.max(0, t - 4)) + upside;
+    cfs.push(cf); cum += cf;
+    if (payback === null && cum >= 0) payback = y;
+  }
+  const y1 = fee + upside;
+  return { y1, mult: capex / y1, irr: irr(cfs) * 100, payback };
+}
+const $ = id => document.getElementById(id);
+function calc() {
+  const fob = +$("fob").value, fee = +$("fee").value, capex = +$("capex").value;
+  $("fobOut").textContent = `$${fob.toFixed(1)}`;
+  $("feeOut").textContent = `$${fee}M`;
+  $("capexOut").textContent = `$${fmt(capex / 1000, 2)}bn`;
+  const r = run(fob, fee, capex);
+  $("calcOut").innerHTML = [
+    [`$${fmt(r.y1)}M`, "EBITDA in year one"],
+    [`${r.mult.toFixed(1)}x`, "Capex to EBITDA"],
+    [`${r.irr.toFixed(1)}%`, "Unlevered IRR"],
+    [r.payback ?? "never", "Payback year"],
+  ].map(([b, s]) => `<div class="stat"><b>${b}</b><span>${s}</span></div>`).join("");
+}
+["fob", "fee", "capex"].forEach(id => $(id).addEventListener("input", calc));
+calc();
+
+// 04 screen
+const W = Object.fromEntries(D.criteria.map(c => [c.key, c.weight]));
+$("weights").innerHTML = D.criteria.map(c =>
+  `<div class="row"><label for="w-${c.key}">${esc(c.label)}</label><input type="range" id="w-${c.key}" min="0" max="40" step="5" value="${c.weight}"><output id="wo-${c.key}">${c.weight}</output></div>`).join("");
+function rank() {
+  const total = Object.values(W).reduce((a, b) => a + b, 0) || 1;
+  const rows = D.candidates.map(c => ({ ...c, s: D.criteria.reduce((a, k) => a + c.scores[k.key] * W[k.key], 0) / total }))
+    .sort((a, b) => b.s - a.s);
+  document.querySelector("#rank tbody").innerHTML = rows.map((c, i) => `
+    <tr><td>${i + 1}</td>
+    <td><div class="cand-name">${esc(c.name)}</div><div class="cand-where">${esc(c.where)} · ${esc(c.partner)}</div>
+      <details><summary>Why</summary><p>${esc(c.notes)}</p>
+      <p class="cand-where">${D.criteria.map(k => `${esc(k.label.split(" (")[0])}: ${c.scores[k.key]}`).join(" · ")}</p></details></td>
+    <td class="r"><span class="num">${c.s.toFixed(2)}</span><div class="bar"><i style="width:${c.s / 5 * 100}%"></i></div></td></tr>`).join("");
+}
+D.criteria.forEach(c => $(`w-${c.key}`).addEventListener("input", e => {
+  W[c.key] = +e.target.value; $(`wo-${c.key}`).textContent = e.target.value; rank();
+}));
+rank();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "functions": {
+    "api/ships.js": { "maxDuration": 60 }
+  },
+  "cleanUrls": true
+}

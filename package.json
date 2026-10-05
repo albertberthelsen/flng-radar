@@ -1,0 +1,7 @@
+{
+  "name": "golar-flng-radar",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": { "dev": "node scripts/dev.mjs", "model": "python3 model/flng_model.py" }
+}

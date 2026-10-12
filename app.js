@@ -258,6 +258,7 @@ async function loadNews() {
     if (j.error) throw new Error(j.error);
     state.news = j.articles.map(tagArticle);
     renderNews();
+    renderGolarNews();
   } catch (e) {
     $("news").innerHTML = `<li class="muted">News unavailable: ${esc(e.message)}</li>`;
   }
@@ -493,6 +494,20 @@ function showTerminal(i) {
 }
 
 // ---------------------------------------------------------------- pages
+
+function renderStatus() {
+  const S = window.STATUS;
+  const fmt = d => /^\d{4}-\d{2}-\d{2}$/.test(d) ? new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : d;
+  $("statusAsOf").innerHTML = `Updated ${fmt(S.asOf)} · ${S.sources.map(([t, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(", ")}`;
+  $("statusQ").textContent = S.question;
+  $("statusSteps").innerHTML = S.steps.map(st => `<li class="${st.done ? "done" : st.date === "Open" ? "open" : ""}"><span class="d">${esc(fmt(st.date))}</span><span>${esc(st.text)}</span></li>`).join("");
+}
+renderStatus();
+
+function renderGolarNews() {
+  const list = state.news.filter(a => /golar|hilli|gimi|esperanza|southern energy/i.test(a.title)).slice(0, 4);
+  $("golarNews").innerHTML = list.map(newsItem).join("") || `<li class="muted">Nothing new in the last 30 days.</li>`;
+}
 
 function renderHome() {
   if (state.prices) {

@@ -25,7 +25,7 @@ window.DATA = {
    "name": "FLNG #4",
    "design": "MKII",
    "mtpa": 3.5,
-   "status": "Ordered Aug 2026, delivery end 2029",
+   "status": "Ordered Aug 2026, hull (Grace Dahlia) bought Oct 2026, delivery end 2029",
    "contract": "Open. Golar is negotiating with several possible charterers."
   }
  ],

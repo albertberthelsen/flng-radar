@@ -26,7 +26,7 @@ FLEET = [
      "contract": "bp, Mauritania/Senegal. 20 years. Golar owns 70%. Q2 2026 day rate 15% above contract."},
     {"name": "Esperanza", "design": "MKII", "mtpa": 3.5, "status": "74% built, CIMC Raffles",
      "contract": "SESA, Argentina. 20 years from H2 2028. $400M EBITDA a year plus commodity upside."},
-    {"name": "FLNG #4", "design": "MKII", "mtpa": 3.5, "status": "Ordered Aug 2026, delivery end 2029",
+    {"name": "FLNG #4", "design": "MKII", "mtpa": 3.5, "status": "Ordered Aug 2026, hull (Grace Dahlia) bought Oct 2026, delivery end 2029",
      "contract": "Open. Golar is negotiating with several possible charterers."},
 ]
 

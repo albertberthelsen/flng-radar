@@ -7,69 +7,63 @@
 <meta name="description" content="A business development case on where Golar LNG should deploy its fourth FLNG unit.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0c0e12;
-  --panel: #12151b;
-  --text: #ece7dc;
-  --muted: #8b8f97;
-  --rule: rgba(236, 231, 220, 0.14);
-  --rule-strong: rgba(236, 231, 220, 0.28);
-  --accent: #8fb0d4;
-  --serif: "Fraunces", Georgia, serif;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
-  color-scheme: dark;
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #f6f3ec; --panel: #ece8de; --text: #1a1c20; --muted: #5d6169;
-    --rule: rgba(26, 28, 32, 0.14); --rule-strong: rgba(26, 28, 32, 0.3); --accent: #3d6a99;
-    color-scheme: light;
-  }
+  --bg: #f7f8f3;
+  --panel: #ffffff;
+  --text: #1b2a3a;
+  --navy: #012d63;
+  --muted: #5f6870;
+  --rule: #e2e3db;
+  --rule-strong: #c9cbc1;
+  --accent: #278ccd;
+  --serif: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sans: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light;
 }
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0; background: var(--bg); color: var(--text);
   font-family: var(--sans); font-size: 1.0625rem; line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums;
 }
 main { max-width: 46rem; margin: 0 auto; padding: 4rem 16px 6rem; }
-h1, h2, h3 { font-family: var(--serif); font-weight: 400; line-height: 1.15; margin: 0; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 800; color: var(--navy); line-height: 1.15; margin: 0; }
 h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); letter-spacing: -0.01em; }
 h2 { font-size: 1.75rem; margin-bottom: 1rem; }
 h3 { font-size: 1.2rem; margin: 1.5rem 0 0.4rem; }
 p { margin: 0 0 1rem; }
 a { color: var(--accent); }
-.label { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.label { font-family: var(--mono); font-weight: 700; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .lede { font-size: 1.2rem; color: var(--text); margin-top: 1.5rem; }
 section { border-top: 1px solid var(--rule); padding-top: 2.5rem; margin-top: 3.5rem; }
 section > .label { display: block; margin-bottom: 0.6rem; }
-.num { color: var(--accent); font-family: var(--mono); }
+.num { color: var(--navy); font-family: var(--mono); font-weight: 700; }
 
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 1.5rem 0; }
-.stat { background: var(--bg); padding: 1rem; }
-.stat b { display: block; font-family: var(--serif); font-weight: 400; font-size: 1.7rem; line-height: 1.1; }
+.stat { background: var(--panel); padding: 1rem; }
+.stat b { display: block; font-family: var(--serif); font-weight: 800; font-size: 1.7rem; line-height: 1.1; color: var(--navy); }
 .stat span { font-size: 0.85rem; color: var(--muted); }
 
 .table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; }
 table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-th { text-align: left; font-family: var(--mono); font-weight: 400; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 0.5rem 0.6rem 0.5rem 0; border-bottom: 1px solid var(--rule-strong); }
+th { text-align: left; font-family: var(--mono); font-weight: 800; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 0.5rem 0.6rem 0.5rem 0; border-bottom: 1px solid var(--rule-strong); }
 td { padding: 0.65rem 0.6rem 0.65rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
 td.r, th.r { text-align: right; }
 
-.calc { background: var(--panel); border: 1px solid var(--rule); padding: 1.25rem; margin: 1.5rem 0; }
+.calc { background: var(--panel); border: 1px solid var(--rule); border-top: 3px solid var(--navy); padding: 1.25rem; margin: 1.5rem 0; }
 .calc .row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1rem; margin-bottom: 1rem; }
 .calc label { font-size: 0.95rem; min-width: 11rem; }
-.calc output { font-family: var(--mono); color: var(--accent); min-width: 5rem; }
+.calc output { font-family: var(--mono); font-weight: 700; color: var(--navy); min-width: 5rem; }
 input[type=range] { flex: 1; min-width: 10rem; accent-color: var(--accent); }
 .calc .stats { margin: 0.5rem 0 0; }
 .calc .stat { background: var(--panel); }
 
 .bar { height: 6px; background: var(--rule); margin-top: 0.35rem; }
-.bar i { display: block; height: 100%; background: var(--accent); transition: width 0.25s ease; }
-.cand-name { font-family: var(--serif); font-size: 1.05rem; }
+.bar i { display: block; height: 100%; background: var(--navy); transition: width 0.25s ease; }
+.cand-name { font-family: var(--serif); font-weight: 700; font-size: 1.02rem; color: var(--navy); }
 .cand-where { color: var(--muted); font-size: 0.85rem; }
 details { margin-top: 0.4rem; }
 summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; }
@@ -81,12 +75,13 @@ ol.steps li { margin-bottom: 0.6rem; }
 .sources { font-size: 0.85rem; color: var(--muted); }
 .sources li { margin-bottom: 0.3rem; }
 footer { margin-top: 4rem; font-size: 0.85rem; color: var(--muted); }
-.topnav { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.5rem; padding: 0.9rem 16px; background: var(--bg); border-bottom: 1px solid var(--rule); }
-.topnav .brand { font-family: var(--serif); font-size: 1.15rem; color: var(--text); text-decoration: none; }
-.topnav nav { display: flex; gap: 1.1rem; overflow-x: auto; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
-.topnav nav a { color: var(--muted); text-decoration: none; }
-.topnav nav a.on { color: var(--text); border-bottom: 1px solid var(--accent); }
-.next { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 0.6rem 1rem; }
+.topnav { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.5rem; padding: 0.9rem 16px; background: var(--navy); }
+.topnav .brand { font-weight: 800; font-size: 1.1rem; letter-spacing: 0.02em; color: #fff; text-decoration: none; }
+.topnav nav { display: flex; gap: 1.3rem; overflow-x: auto; font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
+.topnav nav a { color: rgba(255, 255, 255, 0.7); text-decoration: none; }
+.topnav nav a.on { color: #fff; border-bottom: 2px solid #73bbd4; }
+.next { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem; font-weight: 700; font-size: 0.9rem; color: #fff; background: var(--navy); text-decoration: none; padding: 0.7rem 1.2rem; border-radius: 3px; }
+.next:hover { background: var(--accent); }
 .next svg { width: 1em; height: 1em; }
 </style>
 </head>

@@ -22,10 +22,10 @@ const state = { prices: null, news: [], ships: [], region: "All" };
 
 // ---------------------------------------------------------------- map
 
-const COLORS = { golar: "#8fb0d4", competitor: "#b9a07a", opportunity: "#7fc4a4" };
+const COLORS = { golar: "#012d63", competitor: "#81888e", opportunity: "#3a958a" };
 const map = new maplibregl.Map({
   container: "map",
-  style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+  style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
   center: [10, 12], zoom: innerWidth < 760 ? 0.6 : 1.6, attributionControl: false,
 });
 map.addControl(new maplibregl.AttributionControl({ compact: true }), "top-right");
@@ -40,22 +40,22 @@ const geo = list => ({
 map.on("load", () => {
   map.addSource("assets", { type: "geojson", data: geo(ASSETS) });
   map.addLayer({ id: "halo", type: "circle", source: "assets", filter: ["==", ["get", "kind"], "golar"],
-    paint: { "circle-radius": 14, "circle-color": COLORS.golar, "circle-opacity": 0.15 } });
+    paint: { "circle-radius": 14, "circle-color": COLORS.golar, "circle-opacity": 0.12 } });
   map.addLayer({ id: "pts", type: "circle", source: "assets", paint: {
     "circle-radius": ["match", ["get", "kind"], "golar", 6.5, "opportunity", 6, 4.5],
     "circle-color": ["match", ["get", "kind"], "golar", COLORS.golar, "opportunity", COLORS.opportunity, COLORS.competitor],
     "circle-stroke-width": ["match", ["get", "kind"], "opportunity", 2, 0],
-    "circle-stroke-color": "#0c0e12",
+    "circle-stroke-color": "#ffffff",
   } });
   map.addLayer({ id: "labels", type: "symbol", source: "assets", minzoom: 2.2, layout: {
     "text-field": ["get", "name"], "text-size": 11, "text-offset": [0, 1.2], "text-anchor": "top", "text-font": ["Open Sans Regular"],
-  }, paint: { "text-color": "#c9c4ba", "text-halo-color": "#0c0e12", "text-halo-width": 1.2 } });
+  }, paint: { "text-color": "#012d63", "text-halo-color": "#ffffff", "text-halo-width": 1.4 } });
 
   map.addSource("ships", { type: "geojson", data: geo([]) });
   map.addLayer({ id: "ships", type: "circle", source: "ships", paint: {
     "circle-radius": ["case", ["!=", ["get", "golar"], ""], 6, 3.5],
-    "circle-color": ["case", ["!=", ["get", "golar"], ""], "#ffffff", "#e0c27a"],
-    "circle-stroke-width": 1, "circle-stroke-color": "#0c0e12",
+    "circle-color": ["case", ["!=", ["get", "golar"], ""], "#012d63", "#d9822b"],
+    "circle-stroke-width": 1, "circle-stroke-color": "#ffffff",
   } });
 
   for (const layer of ["pts", "ships"]) {
@@ -75,9 +75,9 @@ const legend = document.createElement("div");
 legend.className = "mlegend";
 legend.innerHTML = `<span><i style="background:${COLORS.golar}"></i>Golar</span><span><i style="background:${COLORS.opportunity}"></i>Opportunity for #4</span><span><i style="background:${COLORS.competitor}"></i>Other FLNG</span>
   <hr>
-  <label><input type="checkbox" data-layer="leads" checked><i style="background:none;border:1.5px solid #e8834a"></i>Flaring leads</label>
-  <label><input type="checkbox" data-layer="flares"><i style="background:#e8834a;opacity:.6"></i>All flares 2025</label>
-  <label><input type="checkbox" data-layer="terminals" checked><i style="background:#7fc4a4;opacity:.7"></i>LNG export projects</label>`;
+  <label><input type="checkbox" data-layer="leads" checked><i style="background:none;border:1.5px solid #e07a2f"></i>Flaring leads</label>
+  <label><input type="checkbox" data-layer="flares"><i style="background:#e07a2f;opacity:.6"></i>All flares 2025</label>
+  <label><input type="checkbox" data-layer="terminals" checked><i style="background:#3a958a;opacity:.8"></i>LNG export projects</label>`;
 legend.querySelectorAll("input[data-layer]").forEach(cb => cb.addEventListener("change", () => {
   if (map.getLayer(cb.dataset.layer)) map.setLayoutProperty(cb.dataset.layer, "visibility", cb.checked ? "visible" : "none");
 }));
@@ -162,10 +162,10 @@ function drawChart() {
   const path = h => h.map(([t, v], i) => `${i ? "L" : "M"}${x(t).toFixed(1)},${y(v).toFixed(1)}`).join("");
   const last = p.ttf.history.at(-1);
   svg.innerHTML = `
-    <line x1="0" x2="${W}" y1="${y(THRESHOLD)}" y2="${y(THRESHOLD)}" stroke="#8b8f97" stroke-dasharray="3 3" stroke-width="1" vector-effect="non-scaling-stroke"/>
-    <path d="${path(p.hh.history)}" fill="none" stroke="#c98f8f" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
-    <path d="${path(p.ttf.history)}" fill="none" stroke="#8fb0d4" stroke-width="2" vector-effect="non-scaling-stroke"/>
-    <circle cx="${x(last[0])}" cy="${y(last[1])}" r="3" fill="#8fb0d4"/>`;
+    <line x1="0" x2="${W}" y1="${y(THRESHOLD)}" y2="${y(THRESHOLD)}" stroke="#9aa1a8" stroke-dasharray="3 3" stroke-width="1" vector-effect="non-scaling-stroke"/>
+    <path d="${path(p.hh.history)}" fill="none" stroke="#d9822b" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+    <path d="${path(p.ttf.history)}" fill="none" stroke="#012d63" stroke-width="2" vector-effect="non-scaling-stroke"/>
+    <circle cx="${x(last[0])}" cy="${y(last[1])}" r="3.5" fill="#012d63"/>`;
 }
 
 // ---------------------------------------------------------------- pitch
@@ -344,7 +344,7 @@ function showDetail(id) {
 // Static datasets built by scripts/build_data.py from World Bank flaring and GEM terminal data.
 
 const DATA = {};
-const STATUS_COLOR = ["match", ["get", "s"], "proposed", "#7fc4a4", "construction", "#e0c27a", "operating", "#6f747c", "#4a4e55"];
+const STATUS_COLOR = ["match", ["get", "s"], "proposed", "#3a958a", "construction", "#278ccd", "operating", "#9aa1a8", "#c9cbc1"];
 const fmtQ = q => `${Math.round(q).toLocaleString("en-US")} MMscf/d`;
 const trend = (q, q21) => {
   if (!q21) return "new since 2021";
@@ -371,16 +371,16 @@ function addStaticLayers() {
   map.addSource("flares", { type: "geojson", data: pointFC(DATA.flares, f => [f.x, f.y], f => ({ q: f.q })) });
   map.addLayer({ id: "flares", type: "circle", source: "flares", layout: { visibility: layerOn("flares") }, paint: {
     "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "q"]], 1, 1.2, 40, 12],
-    "circle-color": "#e8834a", "circle-opacity": 0.5, "circle-blur": 0.3 } }, "halo");
+    "circle-color": "#e07a2f", "circle-opacity": 0.45, "circle-blur": 0.3 } }, "halo");
   map.addSource("terminals", { type: "geojson", data: pointFC(DATA.exports, t => [t.x, t.y2], t => ({ s: t.s, cap: t.cap || 0.5 })) });
   map.addLayer({ id: "terminals", type: "circle", source: "terminals", layout: { visibility: layerOn("terminals") }, paint: {
     "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "cap"]], 0, 2, 5, 8],
-    "circle-color": STATUS_COLOR, "circle-opacity": 0.75, "circle-stroke-width": 0.5, "circle-stroke-color": "#0c0e12" } }, "halo");
+    "circle-color": STATUS_COLOR, "circle-opacity": 0.85, "circle-stroke-width": 0.75, "circle-stroke-color": "#ffffff" } }, "halo");
   map.addSource("leads", { type: "geojson", data: pointFC(DATA.leads, l => [l.x, l.y], l => ({ q: l.q, sanc: l.sanc })) });
   map.addLayer({ id: "leads", type: "circle", source: "leads", layout: { visibility: layerOn("leads") }, paint: {
     "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "q"]], 5, 6, 34, 26],
-    "circle-color": "rgba(232,131,74,0.08)", "circle-stroke-width": 1.5,
-    "circle-stroke-color": ["case", ["get", "sanc"], "#6d4a3a", "#e8834a"] } }, "halo");
+    "circle-color": "rgba(224,122,47,0.1)", "circle-stroke-width": 1.75,
+    "circle-stroke-color": ["case", ["get", "sanc"], "#d9b8a0", "#e07a2f"] } }, "halo");
   for (const id of ["terminals", "leads"]) {
     map.on("mouseenter", id, () => (map.getCanvas().style.cursor = "pointer"));
     map.on("mouseleave", id, () => (map.getCanvas().style.cursor = ""));
@@ -446,7 +446,7 @@ function showLead(i) {
   const related = state.news.filter(n => words.some(w => w.length > 3 && n.title.toLowerCase().includes(w))).slice(0, 6);
   const nearbyProposed = DATA.exports.filter(t => t.s === "proposed" && Math.hypot(t.x - l.x, t.y2 - l.y) < 4).slice(0, 4);
   openDetail(`
-    <p class="kind" style="margin-top:1rem;color:#e8834a">Flaring lead${l.sanc ? " · sanctioned country" : ""}</p>
+    <p class="kind" style="margin-top:1rem;color:var(--flare)">Flaring lead${l.sanc ? " · sanctioned country" : ""}</p>
     <h2>${esc(l.cs.join(", "))}</h2>
     <p>${fmtQ(l.q)} burned in 2025 across ${l.n} flare${l.n > 1 ? "s" : ""}, ${trend(l.q, l.q21)}. That is enough feed for about <b>${l.mtpa.toFixed(1)} MTPA</b> of LNG, ${l.mtpa >= 3 ? "enough to fill a MKII on its own" : l.mtpa >= 1.5 ? "around half a MKII" : "a small share of a MKII unless more gas is tied in"}.</p>
     <dl>

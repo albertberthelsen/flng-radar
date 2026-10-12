@@ -106,7 +106,6 @@ async function loadPrices() {
     renderTicker();
     renderToday();
     renderPitch();
-    renderHome();
   } catch (e) {
     $("ticker").innerHTML = `<span class="muted">Prices unavailable: ${esc(e.message)}</span>`;
   }
@@ -258,7 +257,6 @@ async function loadNews() {
     if (j.error) throw new Error(j.error);
     state.news = j.articles.map(tagArticle);
     renderNews();
-    renderGolarNews();
   } catch (e) {
     $("news").innerHTML = `<li class="muted">News unavailable: ${esc(e.message)}</li>`;
   }
@@ -373,7 +371,6 @@ async function loadStatic() {
   renderLeads();
   renderProjects();
   addStaticLayers();
-  renderHome();
 }
 
 function addStaticLayers() {
@@ -498,28 +495,10 @@ function showTerminal(i) {
 function renderStatus() {
   const S = window.STATUS;
   const fmt = d => /^\d{4}-\d{2}-\d{2}$/.test(d) ? new Date(d).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : d;
-  $("statusAsOf").innerHTML = `Updated ${fmt(S.asOf)} · ${S.sources.map(([t, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(", ")}`;
-  $("statusQ").textContent = S.question;
+  $("statusAsOf").textContent = `Updated ${fmt(S.asOf)}`;
   $("statusSteps").innerHTML = S.steps.map(st => `<li class="${st.done ? "done" : st.date === "Open" ? "open" : ""}"><span class="d">${esc(fmt(st.date))}</span><span>${esc(st.text)}</span></li>`).join("");
 }
 renderStatus();
-
-function renderGolarNews() {
-  const list = state.news.filter(a => /golar|hilli|gimi|esperanza|southern energy/i.test(a.title)).slice(0, 4);
-  $("golarNews").innerHTML = list.map(newsItem).join("") || `<li class="muted">Nothing new in the last 30 days.</li>`;
-}
-
-function renderHome() {
-  if (state.prices) {
-    $("hsTtf").textContent = `$${state.prices.ttf.usd.toFixed(2)}`;
-    const over = Math.max(0, state.prices.ttf.usd - 1.5 - THRESHOLD);
-    $("hsUp").textContent = money(over * UPSIDE.reduce((a, u) => a + u.perUsd, 0));
-  }
-  if (DATA.leads) {
-    $("hsFlare").textContent = Math.round(DATA.leads.reduce((a, l) => a + l.q, 0)).toLocaleString("en-US");
-    $("hsProj").textContent = Math.round(DATA.exports.filter(t => t.s === "proposed").reduce((a, t) => a + (t.cap || 0), 0)).toLocaleString("en-US");
-  }
-}
 
 const VIEWS = ["home", "market", "map", "pitch", "news", "sources"];
 function route() {

@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
-<link href="style.css?v=6" rel="stylesheet">
+<link href="style.css?v=7" rel="stylesheet">
 </head>
 <body data-view="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -36,21 +36,6 @@
   <h1>Where should Golar's next floating LNG plant go?</h1>
   <p class="lede">Golar LNG turns natural gas into LNG on floating plants and leases them out on 20 year contracts. Its fourth unit is ordered for the end of 2029 and has no customer yet. This site puts live prices, satellite data and a global project database in one place to help answer where it should go.</p>
 
-  <section class="status" id="status">
-    <div class="status-head"><p class="label">Where FLNG #4 stands</p><span class="asof" id="statusAsOf"></span></div>
-    <p class="status-q" id="statusQ"></p>
-    <ol class="timeline" id="statusSteps"></ol>
-    <p class="label" style="margin-top:1.25rem">Latest about Golar</p>
-    <ul class="news compact" id="golarNews"><li class="muted">Loading</li></ul>
-  </section>
-
-  <div class="stats" id="homeStats">
-    <div class="stat"><b id="hsTtf">…</b><span>European gas price (TTF) now, $/MMBtu</span></div>
-    <div class="stat"><b id="hsUp">…</b><span>Golar's yearly price upside at today's level</span></div>
-    <div class="stat"><b id="hsFlare">…</b><span>Gas burned off near coasts, MMscf/d</span></div>
-    <div class="stat"><b id="hsProj">…</b><span>New LNG export capacity proposed, MTPA</span></div>
-  </div>
-
   <p class="label" style="margin-top:2.5rem">Five steps</p>
   <ol class="steps-list">
     <li><a href="#/market"><span class="n">01</span><span><b>Market</b>What today's gas prices mean for Golar's earnings.</span><svg class="ic"><use href="#arrow"/></svg></a></li>
@@ -61,7 +46,12 @@
   </ol>
   <a class="next" href="#/market">Start with the market <svg class="ic"><use href="#arrow"/></svg></a>
 
-  <p class="note" style="margin-top:3rem">A few words used throughout. <b>LNG</b> is natural gas cooled to a liquid so it can be shipped. <b>FLNG</b> is a floating plant that does the cooling at sea. <b>MTPA</b> is million tonnes of LNG a year; Golar's newest design makes 3.5. <b>MMscf/d</b> is million cubic feet of gas a day; a 3.5 MTPA plant needs about 500.</p>
+  <p class="note" style="margin-top:2.5rem">A few words used throughout. <b>LNG</b> is natural gas cooled to a liquid so it can be shipped. <b>FLNG</b> is a floating plant that does the cooling at sea. <b>MTPA</b> is million tonnes of LNG a year; Golar's newest design makes 3.5. <b>MMscf/d</b> is million cubic feet of gas a day; a 3.5 MTPA plant needs about 500.</p>
+
+  <section class="status" id="status">
+    <div class="status-head"><p class="label">Where FLNG #4 stands</p><span class="asof" id="statusAsOf"></span></div>
+    <ol class="timeline" id="statusSteps"></ol>
+  </section>
 </main>
 
 <!-- ============================================================ market -->
@@ -180,8 +170,8 @@
 <a class="credit" href="https://albertberthelsen.com">Made by Albert Berthelsen</a>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script src="assets.js?v=6"></script>
-<script src="status.js?v=6"></script>
-<script src="app.js?v=6"></script>
+<script src="assets.js?v=7"></script>
+<script src="status.js?v=7"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

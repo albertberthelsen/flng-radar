@@ -24,6 +24,8 @@
   <button class="grab" id="grab" aria-label="Expand panel"><span></span></button>
   <nav class="tabs" role="tablist">
     <button role="tab" data-tab="today" aria-selected="true">Today</button>
+    <button role="tab" data-tab="leads">Leads</button>
+    <button role="tab" data-tab="projects">Projects</button>
     <button role="tab" data-tab="pitch">Pitch</button>
     <button role="tab" data-tab="signals">Signals</button>
     <button role="tab" data-tab="ships">Ships</button>
@@ -40,6 +42,24 @@
     <svg id="chart" viewBox="0 0 360 150" preserveAspectRatio="none" role="img" aria-label="TTF and Henry Hub price history"></svg>
     <div class="legend"><span><i class="sw ttf"></i>TTF</span><span><i class="sw hh"></i>Henry Hub</span><span><i class="sw th"></i>$8 threshold</span></div>
     <p class="note">Golar keeps 25% of the FOB price above $8/MMBtu on Hilli and Esperanza, and owns 10% of SESA. Management puts the combined effect at about $100M a year per $1 above $8. Hilli starts in 2027 and Esperanza in 2028, so this is a run rate, not current earnings. FOB here is TTF less shipping, a proxy for what SESA's cargoes fetch.</p>
+  </section>
+
+  <section class="tab" id="tab-leads" hidden>
+    <p class="label">Gas burned off near the coast, 2025</p>
+    <p class="small">Flared gas is gas with no route to market. Where a lot of it burns near the sea, a floating plant could turn it into LNG. Satellite data from the World Bank, grouped into clusters of flares within 75 km, on land up to 150 km from the coast.</p>
+    <label class="check"><input type="checkbox" id="hideSanc" checked> Hide sanctioned countries</label>
+    <label class="check"><input type="checkbox" id="offOnly"> Offshore only</label>
+    <ol class="list" id="leads"><li class="muted">Loading</li></ol>
+    <p class="note">A MKII needs about 500 MMscf/d, so most single clusters would fill only part of a unit, or need gas from nearby fields too. Flared gas is mostly associated gas from oil production: wet, low pressure and tied to oil output, so it needs processing and its volume falls as fields age. Treat this as a map of where gas has no outlet, not as a list of ready projects.</p>
+  </section>
+
+  <section class="tab" id="tab-projects" hidden>
+    <p class="label">Every LNG export project in the world</p>
+    <p class="small" id="projSummary"></p>
+    <div class="chips" id="projChips"></div>
+    <input type="search" id="projSearch" class="search" placeholder="Search name, country or company">
+    <ol class="list" id="projects"></ol>
+    <p class="note">From Global Energy Monitor's Global Gas Infrastructure Tracker (CC BY 4.0), November 2025 release, so the newest deals may be missing. Proposed floating projects are the most direct customers for FLNG #4. Large proposed onshore projects that are stuck are often candidates for a faster floating option.</p>
   </section>
 
   <section class="tab" id="tab-pitch" hidden>

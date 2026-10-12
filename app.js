@@ -68,11 +68,20 @@ map.on("load", () => {
     if (s) new maplibregl.Popup({ closeButton: false }).setLngLat([s.lon, s.lat]).setHTML(shipHtml(s)).addTo(map);
   });
   if (state.ships.length) drawShips();
+  addStaticLayers();
 });
 
 const legend = document.createElement("div");
 legend.className = "mlegend";
-legend.innerHTML = `<span><i style="background:${COLORS.golar}"></i>Golar</span><span><i style="background:${COLORS.opportunity}"></i>Opportunity for #4</span><span><i style="background:${COLORS.competitor}"></i>Other FLNG</span>`;
+legend.innerHTML = `<span><i style="background:${COLORS.golar}"></i>Golar</span><span><i style="background:${COLORS.opportunity}"></i>Opportunity for #4</span><span><i style="background:${COLORS.competitor}"></i>Other FLNG</span>
+  <hr>
+  <label><input type="checkbox" data-layer="leads" checked><i style="background:none;border:1.5px solid #e8834a"></i>Flaring leads</label>
+  <label><input type="checkbox" data-layer="flares"><i style="background:#e8834a;opacity:.6"></i>All flares 2025</label>
+  <label><input type="checkbox" data-layer="terminals" checked><i style="background:#7fc4a4;opacity:.7"></i>LNG export projects</label>`;
+legend.querySelectorAll("input[data-layer]").forEach(cb => cb.addEventListener("change", () => {
+  if (map.getLayer(cb.dataset.layer)) map.setLayoutProperty(cb.dataset.layer, "visibility", cb.checked ? "visible" : "none");
+}));
+const layerOn = id => legend.querySelector(`[data-layer="${id}"]`)?.checked ? "visible" : "none";
 document.body.appendChild(legend);
 
 // ---------------------------------------------------------------- panel
@@ -163,7 +172,14 @@ function drawChart() {
 const PITCHABLE = ASSETS.filter(a => a.kind === "opportunity" || a.id === "sesa");
 $("opp").innerHTML = PITCHABLE.map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join("");
 $("opp").addEventListener("change", () => {
-  const a = ASSETS.find(x => x.id === $("opp").value);
+  const v = $("opp").value;
+  if (v.startsWith("lead:")) {
+    const l = DATA.leads[Number(v.slice(5))];
+    $("mtpa").value = Math.min(7, Math.max(1, Math.round(l.mtpa * 2) / 2));
+    $("feed").value = 1.5;  // flared gas has no market today; the cost is gathering and processing
+    return renderPitch();
+  }
+  const a = ASSETS.find(x => x.id === v);
   $("mtpa").value = Math.min(7, Math.max(1, a.id === "sesa" ? 3.5 : a.mtpa));
   $("feed").value = a.id === "usgulf" && state.prices ? Math.round(state.prices.hh.usd * 4) / 4 : 2.5;
   renderPitch();
@@ -323,10 +339,153 @@ function showDetail(id) {
   map.flyTo({ center: [a.lon, a.lat], zoom: Math.max(map.getZoom(), 4), offset: innerWidth > 760 ? [0, 0] : [0, -innerHeight * 0.2] });
 }
 
+// ---------------------------------------------------------------- leads and projects
+// Static datasets built by scripts/build_data.py from World Bank flaring and GEM terminal data.
+
+const DATA = {};
+const STATUS_COLOR = ["match", ["get", "s"], "proposed", "#7fc4a4", "construction", "#e0c27a", "operating", "#6f747c", "#4a4e55"];
+const fmtQ = q => `${Math.round(q).toLocaleString("en-US")} MMscf/d`;
+const trend = (q, q21) => {
+  if (!q21) return "new since 2021";
+  const pct = ((q - q21) / q21) * 100;
+  return `<span class="${pct > 0 ? "up" : "down"}">${pct > 0 ? "+" : ""}${pct.toFixed(0)}%</span> since 2021`;
+};
+const pointFC = (list, xy, props) => ({
+  type: "FeatureCollection",
+  features: list.map((d, i) => ({ type: "Feature", geometry: { type: "Point", coordinates: xy(d) }, properties: { i, ...props(d) } })),
+});
+
+async function loadStatic() {
+  const [terminals, flares, leads] = await Promise.all(
+    ["terminals", "flares", "leads"].map(n => fetch(`data/${n}.json`).then(r => r.json())));
+  Object.assign(DATA, { terminals, flares, leads, exports: terminals.filter(t => t.k === "export") });
+  renderLeads();
+  renderProjects();
+  addStaticLayers();
+}
+
+function addStaticLayers() {
+  if (!DATA.leads || !map.getLayer("halo") || map.getSource("leads")) return;
+  map.addSource("flares", { type: "geojson", data: pointFC(DATA.flares, f => [f.x, f.y], f => ({ q: f.q })) });
+  map.addLayer({ id: "flares", type: "circle", source: "flares", layout: { visibility: layerOn("flares") }, paint: {
+    "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "q"]], 1, 1.2, 40, 12],
+    "circle-color": "#e8834a", "circle-opacity": 0.5, "circle-blur": 0.3 } }, "halo");
+  map.addSource("terminals", { type: "geojson", data: pointFC(DATA.exports, t => [t.x, t.y2], t => ({ s: t.s, cap: t.cap || 0.5 })) });
+  map.addLayer({ id: "terminals", type: "circle", source: "terminals", layout: { visibility: layerOn("terminals") }, paint: {
+    "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "cap"]], 0, 2, 5, 8],
+    "circle-color": STATUS_COLOR, "circle-opacity": 0.75, "circle-stroke-width": 0.5, "circle-stroke-color": "#0c0e12" } }, "halo");
+  map.addSource("leads", { type: "geojson", data: pointFC(DATA.leads, l => [l.x, l.y], l => ({ q: l.q, sanc: l.sanc })) });
+  map.addLayer({ id: "leads", type: "circle", source: "leads", layout: { visibility: layerOn("leads") }, paint: {
+    "circle-radius": ["interpolate", ["linear"], ["sqrt", ["get", "q"]], 5, 6, 34, 26],
+    "circle-color": "rgba(232,131,74,0.08)", "circle-stroke-width": 1.5,
+    "circle-stroke-color": ["case", ["get", "sanc"], "#6d4a3a", "#e8834a"] } }, "halo");
+  for (const id of ["terminals", "leads"]) {
+    map.on("mouseenter", id, () => (map.getCanvas().style.cursor = "pointer"));
+    map.on("mouseleave", id, () => (map.getCanvas().style.cursor = ""));
+  }
+  map.on("click", "leads", e => showLead(e.features[0].properties.i));
+  map.on("click", "terminals", e => { if (!e.defaultPrevented) showTerminal(e.features[0].properties.i); });
+}
+
+function leadItem(l, i) {
+  const where = l.off >= 0.5 ? `${Math.round(l.off * 100)}% offshore` : `onshore, ${l.coast} km from coast`;
+  return `<li data-i="${i}"><div class="row1"><span class="ttl">${esc(l.c)}${l.sanc ? '<span class="pill sanc">Sanctioned</span>' : ""}</span><span class="num">${fmtQ(l.q)}</span></div>
+    <div class="meta">${esc(l.fields.slice(0, 2).join(", ") || "Unnamed fields")} · ${esc(l.ops.slice(0, 2).join(", ") || "operator unknown")}</div>
+    <div class="meta">About ${l.mtpa.toFixed(1)} MTPA · ${where} · ${trend(l.q, l.q21)}</div></li>`;
+}
+
+function renderLeads() {
+  const hide = $("hideSanc").checked, off = $("offOnly").checked;
+  const rows = DATA.leads.map((l, i) => [l, i]).filter(([l]) => (!hide || !l.sanc) && (!off || l.off >= 0.5));
+  $("leads").innerHTML = rows.map(([l, i]) => leadItem(l, i)).join("") || `<li class="muted">Nothing matches.</li>`;
+  $("leads").querySelectorAll("li[data-i]").forEach(li => li.addEventListener("click", () => showLead(Number(li.dataset.i))));
+}
+["hideSanc", "offOnly"].forEach(id => $(id).addEventListener("change", renderLeads));
+
+const PROJ = { status: "proposed", float: false, q: "" };
+function renderProjects() {
+  const ex = DATA.exports;
+  const sum = st => ex.filter(t => t.s === st).reduce((a, t) => a + (t.cap || 0), 0);
+  const fl = ex.filter(t => t.fl && t.s === "proposed");
+  $("projSummary").innerHTML = `<b>${Math.round(sum("proposed"))} MTPA</b> of export capacity proposed and <b>${Math.round(sum("construction"))} MTPA</b> under construction worldwide. ${fl.length} proposed units are floating, ${Math.round(fl.reduce((a, t) => a + (t.cap || 0), 0))} MTPA in total.`;
+  const chips = [["proposed", "Proposed"], ["construction", "Building"], ["operating", "Operating"], ["shelved", "Shelved"]];
+  $("projChips").innerHTML = chips.map(([k, n]) => `<button data-s="${k}" aria-pressed="${PROJ.status === k}">${n} ${ex.filter(t => t.s === k).length}</button>`).join("") +
+    `<button data-f="1" aria-pressed="${PROJ.float}">Floating only</button>`;
+  $("projChips").querySelectorAll("button").forEach(b => b.onclick = () => {
+    if (b.dataset.f) PROJ.float = !PROJ.float; else PROJ.status = b.dataset.s;
+    renderProjects();
+  });
+  const q = PROJ.q.toLowerCase();
+  const rows = ex.map((t, i) => [t, i])
+    .filter(([t]) => t.s === PROJ.status && (!PROJ.float || t.fl) &&
+      (!q || `${t.n} ${t.u} ${t.c} ${t.o} ${t.p}`.toLowerCase().includes(q)))
+    .sort((a, b) => (b[0].cap || 0) - (a[0].cap || 0));
+  $("projects").innerHTML = rows.slice(0, 150).map(([t, i]) => `<li data-i="${i}">
+    <div class="row1"><span class="ttl">${esc(t.n)}${t.fl ? '<span class="pill float">Floating</span>' : ""}</span><span class="num">${t.cap ? `${t.cap} MTPA` : ""}</span></div>
+    <div class="meta">${esc(t.c)}${t.u ? ` · ${esc(t.u)}` : ""}${t.y ? ` · ${esc(t.y)}` : ""}</div>
+    <div class="meta">${esc((t.p || t.o).split(";").slice(0, 3).join(","))}</div></li>`).join("") || `<li class="muted">Nothing matches.</li>`;
+  $("projects").querySelectorAll("li[data-i]").forEach(li => li.addEventListener("click", () => showTerminal(Number(li.dataset.i))));
+}
+$("projSearch").addEventListener("input", e => { PROJ.q = e.target.value; renderProjects(); });
+
+function openDetail(html, lon, lat, zoom = 5) {
+  const d = $("detail");
+  document.querySelectorAll(".tab").forEach(t => (t.hidden = true));
+  d.hidden = false;
+  d.scrollTop = 0;
+  d.innerHTML = `<button class="back" id="back">Back</button>${html}`;
+  $("back").onclick = () => selectTab(document.querySelector('.tabs [aria-selected="true"]').dataset.tab);
+  map.flyTo({ center: [lon, lat], zoom: Math.max(map.getZoom(), zoom), offset: innerWidth > 760 ? [0, 0] : [0, -innerHeight * 0.2] });
+}
+
+function showLead(i) {
+  const l = DATA.leads[i];
+  const words = [l.c, ...l.fields, ...l.ops].map(w => w.toLowerCase());
+  const related = state.news.filter(n => words.some(w => w.length > 3 && n.title.toLowerCase().includes(w))).slice(0, 6);
+  const nearbyProposed = DATA.exports.filter(t => t.s === "proposed" && Math.hypot(t.x - l.x, t.y2 - l.y) < 4).slice(0, 4);
+  openDetail(`
+    <p class="kind" style="margin-top:1rem;color:#e8834a">Flaring lead${l.sanc ? " · sanctioned country" : ""}</p>
+    <h2>${esc(l.cs.join(", "))}</h2>
+    <p>${fmtQ(l.q)} burned in 2025 across ${l.n} flare${l.n > 1 ? "s" : ""}, ${trend(l.q, l.q21)}. That is enough feed for about <b>${l.mtpa.toFixed(1)} MTPA</b> of LNG, ${l.mtpa >= 3 ? "enough to fill a MKII on its own" : l.mtpa >= 1.5 ? "around half a MKII" : "a small share of a MKII unless more gas is tied in"}.</p>
+    <dl>
+      <dt>Fields</dt><dd>${esc(l.fields.join(", ") || "Not named")}</dd>
+      <dt>Operators</dt><dd>${esc(l.ops.join(", ") || "Unknown")}</dd>
+      <dt>Location</dt><dd>${l.off >= 0.5 ? `${Math.round(l.off * 100)}% offshore` : `Onshore, about ${l.coast} km from the coast`}</dd>
+      <dt>Nearest LNG export</dt><dd>${esc(l.near)}, ${l.nearKm} km</dd>
+    </dl>
+    ${nearbyProposed.length ? `<p class="label">Proposed LNG projects nearby</p><ul class="news">${nearbyProposed.map(t => `<li>${esc(t.n)}${t.u ? ` · ${esc(t.u)}` : ""} <span class="meta">${t.cap ? t.cap + " MTPA" : ""}</span></li>`).join("")}</ul>` : ""}
+    ${l.sanc ? "" : `<button class="cta" id="toPitch">Run the pitch for this gas</button>`}
+    <p class="label" style="margin-top:1.5rem">Related news</p>
+    <ul class="news">${related.map(newsItem).join("") || `<li class="muted">No matching articles in the last 30 days.</li>`}</ul>`, l.x, l.y, 5.5);
+  const tp = $("toPitch");
+  if (tp) tp.onclick = () => {
+    const v = `lead:${i}`;
+    if (![...$("opp").options].some(o => o.value === v)) $("opp").insertAdjacentHTML("beforeend", `<option value="${v}">Flaring: ${esc(l.c)}, ${esc(l.fields[0] || "")}</option>`);
+    $("opp").value = v; $("opp").dispatchEvent(new Event("change")); selectTab("pitch");
+  };
+}
+
+function showTerminal(i) {
+  const t = DATA.exports[i];
+  openDetail(`
+    <p class="kind" style="margin-top:1rem">LNG export project · ${esc(t.s)}${t.fl ? " · floating" : ""}</p>
+    <h2>${esc(t.n)}</h2>
+    <dl>
+      ${t.u ? `<dt>Unit</dt><dd>${esc(t.u)}</dd>` : ""}
+      <dt>Country</dt><dd>${esc(t.c)}</dd>
+      <dt>Capacity</dt><dd>${t.cap ? `${t.cap} MTPA` : "Not stated"}</dd>
+      ${t.y ? `<dt>Start</dt><dd>${esc(t.y)}</dd>` : ""}
+      <dt>Owner</dt><dd>${esc(t.o)}</dd>
+      <dt>Parents</dt><dd>${esc(t.p)}</dd>
+    </dl>
+    ${t.url ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">Full profile on GEM Wiki</a>` : ""}`, t.x, t.y2, 5);
+}
+
 // ---------------------------------------------------------------- start
 
 renderToday();
 renderPitch();
 loadPrices();
 loadNews();
+loadStatic();
 setInterval(loadPrices, 120000);

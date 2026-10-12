@@ -42,7 +42,7 @@ button, select, input { font: inherit; color: inherit; }
 .page h2 { font-family: var(--serif); font-weight: 700; color: var(--navy); font-size: 1.5rem; margin: 2.5rem 0 0.75rem; }
 .lede { font-size: 1.12rem; line-height: 1.6; margin: 0 0 1.5rem; }
 .card { background: var(--raise); border: 1px solid var(--rule); border-top: 3px solid var(--navy); padding: 1.25rem; margin: 1.5rem 0; }
-.status { background: var(--raise); border: 1px solid var(--rule); border-left: 4px solid var(--accent); padding: 0.8rem 1rem; margin: 2rem 0 0; }
+.status { background: var(--raise); border: 1px solid var(--rule); border-left: 4px solid var(--accent); padding: 0.8rem 1rem; margin: 1.5rem 0 0; }
 .status-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
 .status .asof { font-size: 0.78rem; color: var(--muted); }
 .status-q { font-weight: 700; color: var(--navy); margin: 0.2rem 0 0.9rem; }

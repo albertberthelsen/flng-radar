@@ -103,7 +103,10 @@ ul.news, ul.ships { list-style: none; padding: 0; margin: 0; }
 .kind { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .kind.golar { color: var(--golar); } .kind.competitor { color: var(--comp); } .kind.opportunity { color: var(--opp); }
 
-.mlegend { position: fixed; z-index: 3; right: 12px; bottom: 28px; background: var(--panel); border: 1px solid var(--rule); padding: 0.5rem 0.75rem; font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.mlegend { position: fixed; z-index: 3; right: 12px; bottom: 44px; background: var(--panel); border: 1px solid var(--rule); padding: 0.5rem 0.75rem; font-size: 0.75rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.credit { position: fixed; z-index: 3; right: 12px; bottom: 12px; font-size: 0.75rem; color: var(--muted); text-decoration: none; background: var(--panel); border: 1px solid var(--rule); padding: 0.3rem 0.65rem; }
+.credit:hover { color: var(--accent); border-color: var(--accent); }
+.credit-m { display: none; }
 .mlegend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.45rem; vertical-align: -1px; }
 
 @media (max-width: 760px) {
@@ -114,5 +117,7 @@ ul.news, ul.ships { list-style: none; padding: 0; margin: 0; }
   .grab { display: flex; justify-content: center; background: none; border: 0; padding: 6px 0 2px; cursor: pointer; }
   .grab span { width: 40px; height: 4px; border-radius: 2px; background: var(--rule-strong); }
   .mlegend { top: calc(var(--top) + 10px); bottom: auto; right: auto; left: 10px; }
-  .foot { display: none; }
+  .credit, .disc { display: none; }
+  .credit-m { display: inline; }
+  .foot { padding-bottom: calc(0.7rem + env(safe-area-inset-bottom)); }
 }

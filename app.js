@@ -26,8 +26,9 @@ const COLORS = { golar: "#8fb0d4", competitor: "#b9a07a", opportunity: "#7fc4a4"
 const map = new maplibregl.Map({
   container: "map",
   style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-  center: [10, 12], zoom: innerWidth < 760 ? 0.6 : 1.6, attributionControl: { compact: true },
+  center: [10, 12], zoom: innerWidth < 760 ? 0.6 : 1.6, attributionControl: false,
 });
+map.addControl(new maplibregl.AttributionControl({ compact: true }), "top-right");
 map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
 if (innerWidth > 760) map.setPadding({ left: 400 });
 

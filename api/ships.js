@@ -56,6 +56,6 @@ export async function GET() {
     .filter(s => s.lat != null && s.site)
     .map(s => ({ ...s, tanker: (s.type >= 80 && s.type <= 89) || /LNG|GAS/i.test(s.name) }));
   return Response.json({ updated: Date.now(), listenedMs: LISTEN_MS, heard: ships.size, ships: list }, {
-    headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=900" },
+    headers: { "Cache-Control": "public, s-maxage=600, stale-while-revalidate=86400" },
   });
 }

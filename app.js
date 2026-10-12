@@ -288,8 +288,16 @@ const shipHtml = s => `<b>${esc(s.name || "Unknown")}</b>${s.golar ? ' <span cla
 
 async function loadShips() {
   state.shipsLoaded = true;
+  const started = Date.now();
+  const tick = setInterval(() => {
+    const left = Math.max(0, 45 - Math.round((Date.now() - started) / 1000));
+    $("shipsStatus").textContent = left > 0
+      ? `Listening to the live ship feed: ${left} s left. You can look around the map meanwhile.`
+      : "Almost there, collecting the last positions.";
+  }, 1000);
   try {
     const r = await fetch("/api/ships");
+    clearInterval(tick);
     const j = await r.json();
     if (j.error) throw new Error(j.error);
     state.ships = j.ships.filter(s => s.lat != null);
@@ -304,6 +312,7 @@ async function loadShips() {
     }));
     drawShips();
   } catch (e) {
+    clearInterval(tick);
     $("shipsStatus").textContent = /not set/.test(e.message) ? "Ship tracking needs an aisstream.io API key on the server." : `Ships unavailable: ${e.message}`;
   }
 }
@@ -517,4 +526,5 @@ renderPitch();
 loadPrices();
 loadNews();
 loadStatic();
+setTimeout(() => { if (!state.shipsLoaded) loadShips(); }, 1500);  // the feed takes up to 45 s, so start early
 setInterval(loadPrices, 120000);

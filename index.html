@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
-<link href="style.css?v=4" rel="stylesheet">
+<link href="style.css?v=5" rel="stylesheet">
 </head>
 <body data-view="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -108,7 +108,7 @@
     </section>
 
     <section class="tab" id="tab-ships" hidden>
-      <p class="muted small" id="shipsStatus">Loading. This listens to the live ship feed for 45 seconds.</p>
+      <p class="muted small" id="shipsStatus">Connecting to the live ship feed. It listens for up to 45 seconds.</p>
       <ul class="ships" id="ships"></ul>
       <p class="note">Watched: GTA (Mauritania/Senegal), Kribi (Cameroon), Gulf of San Matías (Argentina), the Singapore yards and CIMC Raffles in Yantai. The free feed comes from receivers on shore, so ships far out at sea rarely show.</p>
     </section>
@@ -161,7 +161,7 @@
       <tr><td>Gas flaring by site, 2012 to 2025</td><td><a href="https://www.worldbank.org/en/programs/gasflaringreduction/global-flaring-data" target="_blank" rel="noopener">World Bank Global Flaring and Methane Reduction Partnership</a>, from VIIRS satellite data by the Payne Institute</td><td>Yearly, last release June 2026</td></tr>
       <tr><td>LNG export and import projects worldwide</td><td><a href="https://globalenergymonitor.org/projects/global-gas-infrastructure-tracker/" target="_blank" rel="noopener">Global Energy Monitor, Global Gas Infrastructure Tracker</a> (CC BY 4.0)</td><td>Release of November 2025</td></tr>
       <tr><td>News</td><td><a href="https://news.google.com" target="_blank" rel="noopener">Google News</a> search feeds</td><td>Every 30 minutes</td></tr>
-      <tr><td>Ships</td><td><a href="https://aisstream.io" target="_blank" rel="noopener">aisstream.io</a> live AIS feed</td><td>On request, kept for 5 minutes</td></tr>
+      <tr><td>Ships</td><td><a href="https://aisstream.io" target="_blank" rel="noopener">aisstream.io</a> live AIS feed</td><td>Live, refreshed about every 10 minutes</td></tr>
       <tr><td>Golar's fleet, contracts and terms</td><td><a href="https://www.globenewswire.com/news-release/2026/08/13/3344321/0/en/golar-lng-limited-interim-results-for-the-period-ended-june-30-2026.html" target="_blank" rel="noopener">Golar LNG Q2 2026 report</a> and earnings call</td><td>Quarterly</td></tr>
       <tr><td>Map, coastlines</td><td><a href="https://carto.com/basemaps" target="_blank" rel="noopener">CARTO</a>, <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a></td><td>Static</td></tr>
     </tbody>
@@ -172,7 +172,7 @@
 <a class="credit" href="https://albertberthelsen.com">Made by Albert Berthelsen</a>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script src="assets.js?v=4"></script>
-<script src="app.js?v=4"></script>
+<script src="assets.js?v=5"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>

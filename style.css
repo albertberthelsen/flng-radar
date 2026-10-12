@@ -124,6 +124,7 @@ table.mini tr.total td { border-bottom: 0; font-weight: 600; }
 .chips button { background: var(--raise); border: 1px solid var(--rule-strong); padding: 0.25rem 0.7rem; font-size: 0.78rem; font-weight: 600; cursor: pointer; color: var(--muted); border-radius: 999px; }
 .chips button[aria-pressed="true"] { color: #fff; background: var(--navy); border-color: var(--navy); }
 ul.news, ul.ships { list-style: none; padding: 0; margin: 0; }
+ul.ships:empty { display: none; }
 .news li { padding: 0.7rem 0; border-bottom: 1px solid var(--rule); }
 .news a { color: var(--text); text-decoration: none; }
 .news a:hover { color: var(--accent); }

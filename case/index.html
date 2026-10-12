@@ -81,11 +81,24 @@ ol.steps li { margin-bottom: 0.6rem; }
 .sources { font-size: 0.85rem; color: var(--muted); }
 .sources li { margin-bottom: 0.3rem; }
 footer { margin-top: 4rem; font-size: 0.85rem; color: var(--muted); }
+.topnav { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.5rem; padding: 0.9rem 16px; background: var(--bg); border-bottom: 1px solid var(--rule); }
+.topnav .brand { font-family: var(--serif); font-size: 1.15rem; color: var(--text); text-decoration: none; }
+.topnav nav { display: flex; gap: 1.1rem; overflow-x: auto; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.topnav nav a { color: var(--muted); text-decoration: none; }
+.topnav nav a.on { color: var(--text); border-bottom: 1px solid var(--accent); }
+.next { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 0.6rem 1rem; }
+.next svg { width: 1em; height: 1em; }
 </style>
 </head>
 <body>
+<header class="topnav">
+  <a class="brand" href="../#/home">FLNG Radar</a>
+  <nav aria-label="Sections">
+    <a href="../#/market">Market</a><a href="../#/map">Map</a><a href="../#/pitch">Pitch</a><a href="../#/news">News</a><a class="on" href="./">Case</a><a href="../#/sources">Sources</a>
+  </nav>
+</header>
 <main>
-  <span class="label">Business development case · October 2026</span>
+  <span class="label">05 · Case · October 2026</span>
   <h1>Where should Golar's fourth FLNG go?</h1>
   <p class="lede">In August 2026 Golar LNG ordered a fourth floating liquefaction unit without a charter in place. It will be the earliest FLNG capacity available anywhere when it leaves the yard at the end of 2029. This case looks at what the unit can earn and screens six places it could work.</p>
   <p class="label">Albert Berthelsen · Built on Golar's Q2 2026 report and public sources</p>
@@ -152,6 +165,8 @@ footer { margin-top: 4rem; font-size: 0.85rem; color: var(--muted); }
       <li>Work out how much extra pipeline capacity a third Argentine unit needs, so the fallback has a real price on it.</li>
     </ol>
   </section>
+
+  <a class="next" href="../#/map">Explore the leads on the map <svg viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
 
   <section id="sources">
     <span class="label">Sources</span>

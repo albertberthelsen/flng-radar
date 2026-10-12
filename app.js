@@ -82,7 +82,7 @@ legend.querySelectorAll("input[data-layer]").forEach(cb => cb.addEventListener("
   if (map.getLayer(cb.dataset.layer)) map.setLayoutProperty(cb.dataset.layer, "visibility", cb.checked ? "visible" : "none");
 }));
 const layerOn = id => legend.querySelector(`[data-layer="${id}"]`)?.checked ? "visible" : "none";
-document.body.appendChild(legend);
+document.querySelector(".mapview").appendChild(legend);
 
 // ---------------------------------------------------------------- panel
 
@@ -106,6 +106,7 @@ async function loadPrices() {
     renderTicker();
     renderToday();
     renderPitch();
+    renderHome();
   } catch (e) {
     $("ticker").innerHTML = `<span class="muted">Prices unavailable: ${esc(e.message)}</span>`;
   }
@@ -335,7 +336,7 @@ function showDetail(id) {
     <ul class="news">${related.map(newsItem).join("") || `<li class="muted">No matching articles in the last 30 days.</li>`}</ul>`;
   $("back").onclick = () => selectTab(document.querySelector('.tabs [aria-selected="true"]').dataset.tab);
   const tp = $("toPitch");
-  if (tp) tp.onclick = () => { $("opp").value = id; $("opp").dispatchEvent(new Event("change")); selectTab("pitch"); };
+  if (tp) tp.onclick = () => { $("opp").value = id; $("opp").dispatchEvent(new Event("change")); location.hash = "#/pitch"; };
   map.flyTo({ center: [a.lon, a.lat], zoom: Math.max(map.getZoom(), 4), offset: innerWidth > 760 ? [0, 0] : [0, -innerHeight * 0.2] });
 }
 
@@ -362,6 +363,7 @@ async function loadStatic() {
   renderLeads();
   renderProjects();
   addStaticLayers();
+  renderHome();
 }
 
 function addStaticLayers() {
@@ -461,7 +463,7 @@ function showLead(i) {
   if (tp) tp.onclick = () => {
     const v = `lead:${i}`;
     if (![...$("opp").options].some(o => o.value === v)) $("opp").insertAdjacentHTML("beforeend", `<option value="${v}">Flaring: ${esc(l.c)}, ${esc(l.fields[0] || "")}</option>`);
-    $("opp").value = v; $("opp").dispatchEvent(new Event("change")); selectTab("pitch");
+    $("opp").value = v; $("opp").dispatchEvent(new Event("change")); location.hash = "#/pitch";
   };
 }
 
@@ -480,6 +482,33 @@ function showTerminal(i) {
     </dl>
     ${t.url ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">Full profile on GEM Wiki</a>` : ""}`, t.x, t.y2, 5);
 }
+
+// ---------------------------------------------------------------- pages
+
+function renderHome() {
+  if (state.prices) {
+    $("hsTtf").textContent = `$${state.prices.ttf.usd.toFixed(2)}`;
+    const over = Math.max(0, state.prices.ttf.usd - 1.5 - THRESHOLD);
+    $("hsUp").textContent = money(over * UPSIDE.reduce((a, u) => a + u.perUsd, 0));
+  }
+  if (DATA.leads) {
+    $("hsFlare").textContent = Math.round(DATA.leads.reduce((a, l) => a + l.q, 0)).toLocaleString("en-US");
+    $("hsProj").textContent = Math.round(DATA.exports.filter(t => t.s === "proposed").reduce((a, t) => a + (t.cap || 0), 0)).toLocaleString("en-US");
+  }
+}
+
+const VIEWS = ["home", "market", "map", "pitch", "news", "sources"];
+function route() {
+  const name = location.hash.replace(/^#\/?/, "").split("/")[0];
+  const view = VIEWS.includes(name) ? name : "home";
+  document.body.dataset.view = view;
+  document.querySelectorAll("[data-view]:not(body)").forEach(el => (el.hidden = el.dataset.view !== view));
+  document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("on", a.getAttribute("href") === `#/${view}`));
+  if (view === "map") requestAnimationFrame(() => map.resize());
+  window.scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+route();
 
 // ---------------------------------------------------------------- start
 

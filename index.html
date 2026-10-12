@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>FLNG Radar</title>
-<meta name="description" content="Live gas prices, Golar LNG's commodity upside, every floating LNG unit on one map, and the deals that could fill Golar's fourth FLNG.">
+<meta name="description" content="Where should Golar LNG's next floating LNG plant go? Live gas prices, satellite flaring data, every LNG project in the world and a pitch calculator in one place.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='5' fill='%238fb0d4'/%3E%3Ccircle cx='16' cy='16' r='11' fill='none' stroke='%238fb0d4' stroke-width='2' opacity='.5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,87 +12,162 @@
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <link href="style.css" rel="stylesheet">
 </head>
-<body>
+<body data-view="home">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="arrow" viewBox="0 0 16 16"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
 <header class="top">
-  <div class="brand"><span class="dot"></span>FLNG Radar <span class="sub">for Golar LNG</span></div>
+  <a class="brand" href="#/home"><span class="dot"></span>FLNG Radar</a>
+  <nav class="nav" aria-label="Sections">
+    <a href="#/market">Market</a>
+    <a href="#/map">Map</a>
+    <a href="#/pitch">Pitch</a>
+    <a href="#/news">News</a>
+    <a href="case/">Case</a>
+    <a href="#/sources">Sources</a>
+  </nav>
   <div class="ticker" id="ticker"><span class="muted">Loading prices</span></div>
 </header>
 
-<div id="map" aria-label="Map of floating LNG units and opportunities"></div>
+<!-- ============================================================ home -->
+<main class="page" data-view="home">
+  <p class="label">A business development tool for Golar LNG</p>
+  <h1>Where should Golar's next floating LNG plant go?</h1>
+  <p class="lede">Golar LNG turns natural gas into LNG on floating plants and leases them out on 20 year contracts. Its fourth unit is ordered for the end of 2029 and has no customer yet. This site puts live prices, satellite data and a global project database in one place to help answer where it should go.</p>
 
-<aside class="panel" id="panel">
-  <button class="grab" id="grab" aria-label="Expand panel"><span></span></button>
-  <nav class="tabs" role="tablist">
-    <button role="tab" data-tab="today" aria-selected="true">Today</button>
-    <button role="tab" data-tab="leads">Leads</button>
-    <button role="tab" data-tab="projects">Projects</button>
-    <button role="tab" data-tab="pitch">Pitch</button>
-    <button role="tab" data-tab="signals">Signals</button>
-    <button role="tab" data-tab="ships">Ships</button>
-  </nav>
+  <div class="stats" id="homeStats">
+    <div class="stat"><b id="hsTtf">…</b><span>European gas price (TTF) now, $/MMBtu</span></div>
+    <div class="stat"><b id="hsUp">…</b><span>Golar's yearly price upside at today's level</span></div>
+    <div class="stat"><b id="hsFlare">…</b><span>Gas burned off near coasts, MMscf/d</span></div>
+    <div class="stat"><b id="hsProj">…</b><span>New LNG export capacity proposed, MTPA</span></div>
+  </div>
 
-  <section class="tab" id="tab-today">
+  <p class="label" style="margin-top:2.5rem">Five steps</p>
+  <ol class="steps-list">
+    <li><a href="#/market"><span class="n">01</span><span><b>Market</b>What today's gas prices mean for Golar's earnings.</span><svg class="ic"><use href="#arrow"/></svg></a></li>
+    <li><a href="#/map"><span class="n">02</span><span><b>Map</b>Where gas is burned off for lack of a buyer, and every LNG project in the world.</span><svg class="ic"><use href="#arrow"/></svg></a></li>
+    <li><a href="#/pitch"><span class="n">03</span><span><b>Pitch</b>What a Golar unit is worth to the owner of a gas field.</span><svg class="ic"><use href="#arrow"/></svg></a></li>
+    <li><a href="#/news"><span class="n">04</span><span><b>News</b>FLNG deals, gas discoveries and investment decisions from the last 30 days.</span><svg class="ic"><use href="#arrow"/></svg></a></li>
+    <li><a href="case/"><span class="n">05</span><span><b>Case</b>My recommendation for where the fourth unit should go, and why.</span><svg class="ic"><use href="#arrow"/></svg></a></li>
+  </ol>
+  <a class="next" href="#/market">Start with the market <svg class="ic"><use href="#arrow"/></svg></a>
+
+  <p class="note" style="margin-top:3rem">A few words used throughout. <b>LNG</b> is natural gas cooled to a liquid so it can be shipped. <b>FLNG</b> is a floating plant that does the cooling at sea. <b>MTPA</b> is million tonnes of LNG a year; Golar's newest design makes 3.5. <b>MMscf/d</b> is million cubic feet of gas a day; a 3.5 MTPA plant needs about 500.</p>
+</main>
+
+<!-- ============================================================ market -->
+<main class="page" data-view="market" hidden>
+  <p class="label">01 · Market</p>
+  <h1>What today's prices mean for Golar</h1>
+  <p class="lede">Golar is paid a fixed fee for each unit. On its two Argentine units it also keeps 25% of the LNG price above $8/MMBtu. When European gas is expensive, that share is worth a lot.</p>
+
+  <div class="card">
     <p class="label">Golar's price upside at today's prices</p>
     <div class="big" id="upsideYear">…</div>
     <p class="muted small" id="upsideLine"></p>
     <div class="ctrl"><label for="ship">Shipping to Europe</label><input type="range" id="ship" min="0" max="4" step="0.1" value="1.5"><output id="shipOut"></output></div>
     <div class="ctrl"><label>Argentine FOB proxy</label><output id="fobOut" class="strong"></output></div>
     <table class="mini" id="upsideTable"></table>
-    <p class="label" style="margin-top:1.5rem">Six months, $/MMBtu</p>
-    <svg id="chart" viewBox="0 0 360 150" preserveAspectRatio="none" role="img" aria-label="TTF and Henry Hub price history"></svg>
-    <div class="legend"><span><i class="sw ttf"></i>TTF</span><span><i class="sw hh"></i>Henry Hub</span><span><i class="sw th"></i>$8 threshold</span></div>
-    <p class="note">Golar keeps 25% of the FOB price above $8/MMBtu on Hilli and Esperanza, and owns 10% of SESA. Management puts the combined effect at about $100M a year per $1 above $8. Hilli starts in 2027 and Esperanza in 2028, so this is a run rate, not current earnings. FOB here is TTF less shipping, a proxy for what SESA's cargoes fetch.</p>
-  </section>
+  </div>
 
-  <section class="tab" id="tab-leads" hidden>
-    <p class="label">Gas burned off near the coast, 2025</p>
-    <p class="small">Flared gas is gas with no route to market. Where a lot of it burns near the sea, a floating plant could turn it into LNG. Satellite data from the World Bank, grouped into clusters of flares within 75 km, on land up to 150 km from the coast.</p>
-    <label class="check"><input type="checkbox" id="hideSanc" checked> Hide sanctioned countries</label>
-    <label class="check"><input type="checkbox" id="offOnly"> Offshore only</label>
-    <ol class="list" id="leads"><li class="muted">Loading</li></ol>
-    <p class="note">A MKII needs about 500 MMscf/d, so most single clusters would fill only part of a unit, or need gas from nearby fields too. Flared gas is mostly associated gas from oil production: wet, low pressure and tied to oil output, so it needs processing and its volume falls as fields age. Treat this as a map of where gas has no outlet, not as a list of ready projects.</p>
-  </section>
+  <h2>Six months of prices</h2>
+  <svg id="chart" viewBox="0 0 360 150" preserveAspectRatio="none" role="img" aria-label="TTF and Henry Hub price history"></svg>
+  <div class="legend"><span><i class="sw ttf"></i>TTF (Europe)</span><span><i class="sw hh"></i>Henry Hub (US)</span><span><i class="sw th"></i>$8 threshold</span></div>
+  <p class="note">Hilli starts in Argentina in 2027 and Esperanza in 2028, so this is a run rate, not current earnings. FOB, the price when the LNG is loaded, is estimated here as TTF less shipping to Europe. Management puts the combined effect at about $100M a year for every $1 above $8.</p>
 
-  <section class="tab" id="tab-projects" hidden>
-    <p class="label">Every LNG export project in the world</p>
-    <p class="small" id="projSummary"></p>
-    <div class="chips" id="projChips"></div>
-    <input type="search" id="projSearch" class="search" placeholder="Search name, country or company">
-    <ol class="list" id="projects"></ol>
-    <p class="note">From Global Energy Monitor's Global Gas Infrastructure Tracker (CC BY 4.0), November 2025 release, so the newest deals may be missing. Proposed floating projects are the most direct customers for FLNG #4. Large proposed onshore projects that are stuck are often candidates for a faster floating option.</p>
-  </section>
+  <a class="next" href="#/map">Next: where the gas is <svg class="ic"><use href="#arrow"/></svg></a>
+</main>
 
-  <section class="tab" id="tab-pitch" hidden>
-    <p class="label">What a Golar unit means for a gas owner</p>
+<!-- ============================================================ map -->
+<section class="mapview" data-view="map" hidden>
+  <div id="map" aria-label="Map of LNG projects, gas flaring and Golar's units"></div>
+
+  <aside class="panel" id="panel">
+    <button class="grab" id="grab" aria-label="Expand panel"><span></span></button>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="leads" aria-selected="true">Gas without a buyer</button>
+      <button role="tab" data-tab="projects">LNG projects</button>
+      <button role="tab" data-tab="ships">Ships</button>
+    </nav>
+
+    <section class="tab" id="tab-leads">
+      <p class="small">Satellites see where gas is burned off because there is no pipeline or plant to take it. Where a lot of it burns near the sea, a floating plant could turn it into LNG. Biggest first.</p>
+      <label class="check"><input type="checkbox" id="hideSanc" checked> Hide sanctioned countries</label>
+      <label class="check"><input type="checkbox" id="offOnly"> Offshore only</label>
+      <ol class="list" id="leads"><li class="muted">Loading</li></ol>
+      <p class="note">Flares within 75 km of each other are grouped, on land up to 150 km from the coast. A Golar MKII needs about 500 MMscf/d, so most groups would fill only part of a unit. Flared gas usually comes with oil production, so it needs processing and falls as fields age. Read this as a map of where gas has no outlet, not a list of ready projects.</p>
+    </section>
+
+    <section class="tab" id="tab-projects" hidden>
+      <p class="small" id="projSummary"></p>
+      <div class="chips" id="projChips"></div>
+      <input type="search" id="projSearch" class="search" placeholder="Search name, country or company">
+      <ol class="list" id="projects"></ol>
+      <p class="note">Proposed floating projects are the most direct customers for FLNG #4. Large onshore projects that are stuck can also be candidates for a faster floating option.</p>
+    </section>
+
+    <section class="tab" id="tab-ships" hidden>
+      <p class="muted small" id="shipsStatus">Loading. This listens to the live ship feed for 45 seconds.</p>
+      <ul class="ships" id="ships"></ul>
+      <p class="note">Watched: GTA (Mauritania/Senegal), Kribi (Cameroon), Gulf of San Matías (Argentina), the Singapore yards and CIMC Raffles in Yantai. The free feed comes from receivers on shore, so ships far out at sea rarely show.</p>
+    </section>
+
+    <section class="detail" id="detail" hidden></section>
+
+    <footer class="foot">
+      <a href="#/pitch">Next: pitch a field <svg class="ic"><use href="#arrow"/></svg></a>
+    </footer>
+  </aside>
+</section>
+
+<!-- ============================================================ pitch -->
+<main class="page" data-view="pitch" hidden>
+  <p class="label">03 · Pitch</p>
+  <h1>What a Golar unit is worth to a gas owner</h1>
+  <p class="lede">The argument Golar makes to a customer: you keep your gas and most of the revenue, Golar builds and runs the plant for a yearly fee. Pick a field or a flaring lead from the map, and see who earns what at today's prices.</p>
+
+  <div class="card">
     <div class="ctrl"><label for="opp">Field</label><select id="opp"></select></div>
     <div class="ctrl"><label for="mtpa">Capacity</label><input type="range" id="mtpa" min="1" max="7" step="0.5" value="3.5"><output id="mtpaOut"></output></div>
     <div class="ctrl"><label for="feed">Feed gas cost</label><input type="range" id="feed" min="0.5" max="8" step="0.25" value="2.5"><output id="feedOut"></output></div>
     <div class="ctrl"><label for="fee">Golar fee per year</label><input type="range" id="fee" min="200" max="600" step="10" value="400"><output id="feeOut"></output></div>
     <div id="pitchOut"></div>
-    <p class="note">Fee and price share follow Esperanza's terms, scaled by capacity. 1 MTPA is about 52 million MMBtu a year and needs about 145 MMscf/d of feed gas. Feed gas cost includes 10% used as fuel. IRR is unlevered over a 20 year charter with capex of $2.45bn per 3.5 MTPA, and assumes today's price holds for all 20 years, so treat it as a ceiling when prices are high.</p>
-  </section>
+  </div>
+  <p class="note">Fee and price share follow the terms of Golar's Esperanza contract, scaled by capacity. 1 MTPA is about 52 million MMBtu a year. Feed gas cost includes 10% burned as fuel. IRR is unlevered over a 20 year charter with $2.45bn of capex per 3.5 MTPA and assumes today's price holds for all 20 years, so treat it as a ceiling when prices are high.</p>
 
-  <section class="tab" id="tab-signals" hidden>
-    <p class="label">News from the last 30 days</p>
-    <div class="chips" id="chips"></div>
-    <ul class="news" id="news"><li class="muted">Loading</li></ul>
-  </section>
+  <a class="next" href="#/news">Next: what is moving in the market <svg class="ic"><use href="#arrow"/></svg></a>
+</main>
 
-  <section class="tab" id="tab-ships" hidden>
-    <p class="label">Vessels at Golar's sites, live from AIS</p>
-    <p class="muted small" id="shipsStatus">Loading. This listens to the AIS feed for 45 seconds.</p>
-    <ul class="ships" id="ships"></ul>
-    <p class="note">Sites watched: GTA (Mauritania/Senegal), Kribi (Cameroon), Gulf of San Matías (Argentina), Seatrium yards (Singapore) and CIMC Raffles (Yantai). Coverage comes from volunteer receivers on shore, so busy straits like Singapore show up well and remote offshore fields like GTA only show ships when they come near the coast.</p>
-  </section>
+<!-- ============================================================ news -->
+<main class="page" data-view="news" hidden>
+  <p class="label">04 · News</p>
+  <h1>Signals from the last 30 days</h1>
+  <p class="lede">Floating LNG, gas discoveries and investment decisions, refreshed every half hour and sorted by region.</p>
+  <div class="chips" id="chips"></div>
+  <ul class="news" id="news"><li class="muted">Loading</li></ul>
+  <a class="next" href="case/">Next: my recommendation <svg class="ic"><use href="#arrow"/></svg></a>
+</main>
 
-  <section class="detail" id="detail" hidden></section>
-
-  <footer class="foot">
-    <a href="case/">Read the case</a>
-    <span class="disc">Not affiliated with Golar LNG</span>
-    <span class="credit-m">Made by <a href="https://albertberthelsen.com">Albert Berthelsen</a></span>
-  </footer>
-</aside>
+<!-- ============================================================ sources -->
+<main class="page" data-view="sources" hidden>
+  <p class="label">Sources</p>
+  <h1>Where the data comes from</h1>
+  <p class="lede">Every number on this site comes from a public source. Live data is fetched when you open a page; the large datasets are downloaded and reduced once and stored with the site.</p>
+  <div class="table-wrap"><table class="src">
+    <thead><tr><th>Data</th><th>Source</th><th>Updated</th></tr></thead>
+    <tbody>
+      <tr><td>Gas and oil prices: TTF, Henry Hub, Brent, EUR/USD</td><td><a href="https://finance.yahoo.com/quote/TTF%3DF/" target="_blank" rel="noopener">Yahoo Finance</a> futures prices</td><td>Live, every 2 minutes</td></tr>
+      <tr><td>Gas flaring by site, 2012 to 2025</td><td><a href="https://www.worldbank.org/en/programs/gasflaringreduction/global-flaring-data" target="_blank" rel="noopener">World Bank Global Flaring and Methane Reduction Partnership</a>, from VIIRS satellite data by the Payne Institute</td><td>Yearly, last release June 2026</td></tr>
+      <tr><td>LNG export and import projects worldwide</td><td><a href="https://globalenergymonitor.org/projects/global-gas-infrastructure-tracker/" target="_blank" rel="noopener">Global Energy Monitor, Global Gas Infrastructure Tracker</a> (CC BY 4.0)</td><td>Release of November 2025</td></tr>
+      <tr><td>News</td><td><a href="https://news.google.com" target="_blank" rel="noopener">Google News</a> search feeds</td><td>Every 30 minutes</td></tr>
+      <tr><td>Ships</td><td><a href="https://aisstream.io" target="_blank" rel="noopener">aisstream.io</a> live AIS feed</td><td>On request, kept for 5 minutes</td></tr>
+      <tr><td>Golar's fleet, contracts and terms</td><td><a href="https://www.globenewswire.com/news-release/2026/08/13/3344321/0/en/golar-lng-limited-interim-results-for-the-period-ended-june-30-2026.html" target="_blank" rel="noopener">Golar LNG Q2 2026 report</a> and earnings call</td><td>Quarterly</td></tr>
+      <tr><td>Map, coastlines</td><td><a href="https://carto.com/basemaps" target="_blank" rel="noopener">CARTO</a>, <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">Natural Earth</a></td><td>Static</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Positions of Golar's units and other floating plants are approximate. Scores and recommendations in the case are my own judgement. The code is open on <a href="https://github.com/albertberthelsen/flng-radar" target="_blank" rel="noopener">GitHub</a>. Not affiliated with Golar LNG.</p>
+</main>
 
 <a class="credit" href="https://albertberthelsen.com">Made by Albert Berthelsen</a>
 
